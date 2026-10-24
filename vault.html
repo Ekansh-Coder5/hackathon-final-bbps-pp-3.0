@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privex · Saved data</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <nav class="nav" aria-label="Privex settings">
+      <a href="vault.html" aria-current="page">Saved data</a>
+      <a href="rules.html">Detection rules</a>
+    </nav>
+    <header>
+      <div>
+        <h1>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          Saved data
+        </h1>
+        <p class="lede">Everything Privex replaced for your account, encrypted with your password and stored only in this browser. Chats show your real values only while you're signed in, and only for your own placeholders.</p>
+      </div>
+      <span class="count" id="count" hidden>0 items</span>
+    </header>
+
+    <section class="card auth" id="auth" aria-live="polite">
+      <form id="unlockForm" hidden>
+        <h2>Unlock saved data</h2>
+        <p>Enter your Privex password to see your saved values. This also signs you in, so your chats show your real values until the browser closes.</p>
+        <div class="field">
+          <label for="accountSelect">Account</label>
+          <select id="accountSelect"></select>
+        </div>
+        <div class="field">
+          <label for="unlockPassword">Password</label>
+          <input type="password" id="unlockPassword" autocomplete="current-password" required>
+        </div>
+        <p class="form-error" id="unlockError" role="alert"></p>
+        <div class="row">
+          <button type="submit" class="primary" id="unlockBtn">Unlock</button>
+          <button type="button" class="link-btn" id="showCreate">Create another account</button>
+        </div>
+      </form>
+
+      <form id="createForm" hidden>
+        <h2>Create a Privex account</h2>
+        <p>Your saved values are encrypted with this password. It can't be recovered, so keep it safe. Each account gets its own placeholders, like <code id="tagPreview">[USR:EMAIL_1]</code>.</p>
+        <div class="field">
+          <label for="newUsername">Username</label>
+          <input type="text" id="newUsername" autocomplete="username" maxlength="40" required>
+        </div>
+        <div class="field">
+          <label for="newPassword">Password (at least 6 characters)</label>
+          <input type="password" id="newPassword" autocomplete="new-password" minlength="6" required>
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Confirm password</label>
+          <input type="password" id="confirmPassword" autocomplete="new-password" minlength="6" required>
+        </div>
+        <div class="check-row" id="legacyRow" hidden>
+          <input type="checkbox" id="importLegacy" checked>
+          <label for="importLegacy" id="legacyLabel">Move existing saved data into this account</label>
+        </div>
+        <p class="form-error" id="createError" role="alert"></p>
+        <div class="row">
+          <button type="submit" class="primary" id="createBtn">Create account</button>
+          <button type="button" class="link-btn" id="showUnlock" hidden>I already have an account</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="unlocked" hidden>
+      <div class="card account-bar">
+        <div>
+          <strong id="whoName"></strong>
+          <span class="muted">· your placeholders look like <code id="whoTag"></code></span>
+        </div>
+        <div class="row">
+          <button type="button" id="lock">Lock</button>
+          <button type="button" id="signOut">Sign out</button>
+          <button type="button" class="danger" id="deleteAccount">Delete account</button>
+        </div>
+      </div>
+
+      <div class="card notice" id="legacyNotice" hidden>
+        <p id="legacyText"></p>
+        <div class="row">
+          <button type="button" class="primary" id="moveLegacy">Move into my account</button>
+          <button type="button" class="danger" id="deleteLegacy">Delete them</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input type="search" id="search" placeholder="Search values, placeholders or sites" aria-label="Search saved data">
+        <select id="typeFilter" aria-label="Filter by type"><option value="">All types</option></select>
+        <span class="spacer"></span>
+        <button type="button" id="revealAll">Show values</button>
+        <button type="button" class="danger" id="deleteSelected" disabled>Delete selected</button>
+        <button type="button" class="danger" id="deleteAll" disabled>Delete all</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="check"><input type="checkbox" id="selectAll" aria-label="Select all"></th>
+              <th>Type</th>
+              <th>Original value</th>
+              <th>Placeholder</th>
+              <th class="site">Site</th>
+              <th class="date">Saved</th>
+              <th aria-label="Actions"></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="empty" id="empty" hidden>
+          <strong>Nothing saved yet</strong>
+          Values appear here after Privex masks them in a chat while you're signed in.
+        </div>
+      </div>
+      <p class="note">Changes apply to every open tab straight away. Closing or reloading this page locks it again.</p>
+    </section>
+  </main>
+  <script src="privex_accounts.js"></script>
+  <script src="vault.js"></script>
+</body>
+</html>
